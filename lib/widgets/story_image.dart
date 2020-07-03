@@ -86,22 +86,25 @@ class StoryImage extends StatefulWidget {
 
   final StoryController controller;
 
+  final double aspectRatio;
+
   StoryImage(
     this.imageLoader, {
     Key key,
     this.controller,
     this.fit,
+    this.aspectRatio,
   }) : super(key: key ?? UniqueKey());
 
   /// Use this shorthand to fetch images/gifs from the provided [url]
-  factory StoryImage.url({
-    String url,
-    String file,
-    StoryController controller,
-    Map<String, dynamic> requestHeaders,
-    BoxFit fit = BoxFit.fitWidth,
-    Key key,
-  }) {
+  factory StoryImage.url(
+      {String url,
+      String file,
+      StoryController controller,
+      Map<String, dynamic> requestHeaders,
+      BoxFit fit = BoxFit.fitWidth,
+      Key key,
+      double aspectRatio}) {
     return StoryImage(
         ImageLoader(
           url: url,
@@ -110,6 +113,7 @@ class StoryImage extends StatefulWidget {
         ),
         controller: controller,
         fit: fit,
+        aspectRatio: aspectRatio,
         key: key);
   }
 
@@ -196,9 +200,13 @@ class StoryImageState extends State<StoryImage> {
   Widget getContentView() {
     switch (widget.imageLoader.state) {
       case LoadState.success:
-        return RawImage(
-          image: this.currentFrame,
-          fit: widget.fit,
+        return RotatedBox(
+          quarterTurns:
+              widget.aspectRatio != null ? widget.aspectRatio > 1 ? 1 : 0 : 0,
+          child: RawImage(
+            image: this.currentFrame,
+            fit: widget.fit,
+          ),
         );
       case LoadState.failure:
         return Center(

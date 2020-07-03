@@ -106,6 +106,7 @@ class StoryItem {
   factory StoryItem.pageImage({
     String url,
     String file,
+    double aspectRatio,
     @required StoryController controller,
     BoxFit imageFit = BoxFit.fitWidth,
     String caption,
@@ -123,6 +124,7 @@ class StoryItem {
               file: file,
               controller: controller,
               fit: imageFit,
+              aspectRatio: aspectRatio,
               requestHeaders: requestHeaders,
             ),
             SafeArea(
