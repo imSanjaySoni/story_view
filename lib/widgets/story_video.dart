@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:video_player/video_player.dart';
@@ -113,28 +114,17 @@ class StoryVideoState extends State<StoryVideo> {
   Widget getContentView() {
     if (widget.videoLoader.state == LoadState.success &&
         playerController.value.initialized) {
-      return Center(
-        child: AspectRatio(
-          aspectRatio: playerController.value.aspectRatio,
-          child: VideoPlayer(playerController),
-        ),
+      return AspectRatio(
+        aspectRatio: playerController.value.aspectRatio,
+        child: VideoPlayer(playerController),
       );
     }
 
     return widget.videoLoader.state == LoadState.loading
-        ? Center(
-            child: Container(
-              width: 70,
-              height: 70,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                strokeWidth: 3,
-              ),
-            ),
-          )
+        ? Center(child: CupertinoActivityIndicator())
         : Center(
             child: Text(
-            "Media failed to load.",
+            "Video failed to load.",
             style: TextStyle(
               color: Colors.white,
             ),
