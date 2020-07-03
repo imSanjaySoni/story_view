@@ -400,6 +400,9 @@ class StoryView extends StatefulWidget {
   // Controls the playback of the stories
   final StoryController controller;
 
+  // Progress bar padding
+  final EdgeInsets progressBarpadding;
+
   StoryView({
     @required this.storyItems,
     @required this.controller,
@@ -409,6 +412,7 @@ class StoryView extends StatefulWidget {
     this.repeat = false,
     this.inline = false,
     this.onVerticalSwipeComplete,
+    this.progressBarpadding,
   })  : assert(storyItems != null && storyItems.length > 0,
             "[storyItems] should not be null or empty"),
         assert(progressPosition != null, "[progressPosition] cannot be null"),
@@ -630,10 +634,11 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
               bottom: widget.inline ? false : true,
               // we use SafeArea here for notched and bezeles phones
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
+                padding: this.widget.progressBarpadding ??
+                    EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                 child: PageBar(
                   widget.storyItems
                       .map((it) => PageData(it.duration, it.shown))
