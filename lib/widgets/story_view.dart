@@ -110,6 +110,7 @@ class StoryItem {
     @required StoryController controller,
     BoxFit imageFit = BoxFit.fitWidth,
     String caption,
+    TextStyle captionStyle,
     bool shown = false,
     Map<String, dynamic> requestHeaders,
     Duration duration,
@@ -143,10 +144,11 @@ class StoryItem {
                   child: caption != null
                       ? Text(
                           caption,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
+                          style: captionStyle ??
+                              TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
                           textAlign: TextAlign.center,
                         )
                       : SizedBox(),
@@ -224,6 +226,7 @@ class StoryItem {
     Duration duration,
     BoxFit imageFit = BoxFit.fitWidth,
     String caption,
+    TextStyle captionStyle,
     bool shown = false,
     Map<String, dynamic> requestHeaders,
   }) {
@@ -250,7 +253,11 @@ class StoryItem {
                     child: caption != null
                         ? Text(
                             caption,
-                            style: TextStyle(fontSize: 15, color: Colors.white),
+                            style: captionStyle ??
+                                TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                ),
                             textAlign: TextAlign.center,
                           )
                         : SizedBox(),
