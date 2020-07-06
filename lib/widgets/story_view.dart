@@ -84,40 +84,30 @@ class StoryItem {
           vertical: 16,
         ),
         child: Center(
-            child: GestureDetector(
-          onTap: () {
-            print('hello from parsed text');
-          },
-          child: ParsedText(
-            text: title,
-            softWrap: true,
-            style: textStyle ??
-                TextStyle(
-                  color: contrast > 1.8 ? Colors.white : Colors.black,
-                  fontSize: 18,
-                ),
-            parse: <MatchText>[
-              MatchText(
-                type: ParsedType.URL,
-                style: (textStyle ??
-                        TextStyle(
-                          color: contrast > 1.8 ? Colors.white : Colors.black,
-                          fontSize: 18,
-                        ))
-                    .copyWith(
-                        color: Color.fromRGBO(0, 137, 255, 1.0),
-                        decoration: TextDecoration.underline,
-                        decorationColor: Color.fromRGBO(0, 137, 255, 1.0)),
-                onTap: (String url) async {
-                  print('inside match text');
-                  await onLinkTap(url);
-                },
+            child: ParsedText(
+          text: title,
+          softWrap: true,
+          style: textStyle ??
+              TextStyle(
+                color: contrast > 1.8 ? Colors.white : Colors.black,
+                fontSize: 18,
               ),
-            ],
-            onTap: () {
-              print('rich text');
-            },
-          ),
+          parse: <MatchText>[
+            MatchText(
+              type: ParsedType.URL,
+              style: (textStyle ??
+                      TextStyle(
+                        color: contrast > 1.8 ? Colors.white : Colors.black,
+                        fontSize: 18,
+                      ))
+                  .copyWith(
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.white),
+              onTap: (String url) async {
+                await onLinkTap(url);
+              },
+            ),
+          ],
         )),
       ),
       shown: shown,
@@ -654,6 +644,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print('Screen width: ' + MediaQuery.of(context).size.width.toString());
     return Container(
       color: Colors.white,
       child: Stack(
@@ -690,6 +681,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
               heightFactor: 1,
               child: GestureDetector(
                 onTapDown: (details) {
+                  print('Global ' + details.globalPosition.dx.toString());
+                  print('Local ' + details.localPosition.dx.toString());
                   widget.controller.pause();
                 },
                 onTapCancel: () {
