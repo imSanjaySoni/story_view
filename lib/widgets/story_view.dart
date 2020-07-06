@@ -644,12 +644,65 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('Screen width: ' + MediaQuery.of(context).size.width.toString());
+    double screenWidth = MediaQuery.of(context).size.width;
+    double leftThreshold = 0.2 * screenWidth;
     return Container(
       color: Colors.white,
       child: Stack(
         children: <Widget>[
-          _currentView,
+          GestureDetector(
+              onTapDown: (details) {
+                widget.controller.pause();
+              },
+              onTapCancel: () {
+                widget.controller.play();
+              },
+              onTapUp: (details) {
+                // if debounce timed out (not active) then continue anim
+                if (_nextDebouncer?.isActive == false) {
+                  widget.controller.play();
+                } else {
+                  if (details.localPosition.dx > leftThreshold)
+                    widget.controller.next();
+                  else
+                    widget.controller.previous();
+                }
+              },
+              onVerticalDragStart: widget.onVerticalSwipeComplete == null
+                  ? null
+                  : (details) {
+                      widget.controller.pause();
+                    },
+              onVerticalDragCancel: widget.onVerticalSwipeComplete == null
+                  ? null
+                  : () {
+                      widget.controller.play();
+                    },
+              onVerticalDragUpdate: widget.onVerticalSwipeComplete == null
+                  ? null
+                  : (details) {
+                      if (verticalDragInfo == null) {
+                        verticalDragInfo = VerticalDragInfo();
+                      }
+
+                      verticalDragInfo.update(details.primaryDelta);
+
+                      // TODO: provide callback interface for animation purposes
+                    },
+              onVerticalDragEnd: widget.onVerticalSwipeComplete == null
+                  ? null
+                  : (details) {
+                      widget.controller.play();
+                      // finish up drag cycle
+                      if (!verticalDragInfo.cancel &&
+                          widget.onVerticalSwipeComplete != null) {
+                        widget.onVerticalSwipeComplete(
+                            verticalDragInfo.direction);
+                      }
+
+                      verticalDragInfo = null;
+                    },
+              child: _currentView),
           Align(
             alignment: widget.progressPosition == ProgressPosition.top
                 ? Alignment.topCenter
@@ -675,70 +728,6 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                 ),
               ),
             ),
-          ),
-          Align(
-              alignment: Alignment.centerRight,
-              heightFactor: 1,
-              child: GestureDetector(
-                onTapDown: (details) {
-                  print('Global ' + details.globalPosition.dx.toString());
-                  print('Local ' + details.localPosition.dx.toString());
-                  widget.controller.pause();
-                },
-                onTapCancel: () {
-                  widget.controller.play();
-                },
-                onTapUp: (details) {
-                  // if debounce timed out (not active) then continue anim
-                  if (_nextDebouncer?.isActive == false) {
-                    widget.controller.play();
-                  } else {
-                    widget.controller.next();
-                  }
-                },
-                onVerticalDragStart: widget.onVerticalSwipeComplete == null
-                    ? null
-                    : (details) {
-                        widget.controller.pause();
-                      },
-                onVerticalDragCancel: widget.onVerticalSwipeComplete == null
-                    ? null
-                    : () {
-                        widget.controller.play();
-                      },
-                onVerticalDragUpdate: widget.onVerticalSwipeComplete == null
-                    ? null
-                    : (details) {
-                        if (verticalDragInfo == null) {
-                          verticalDragInfo = VerticalDragInfo();
-                        }
-
-                        verticalDragInfo.update(details.primaryDelta);
-
-                        // TODO: provide callback interface for animation purposes
-                      },
-                onVerticalDragEnd: widget.onVerticalSwipeComplete == null
-                    ? null
-                    : (details) {
-                        widget.controller.play();
-                        // finish up drag cycle
-                        if (!verticalDragInfo.cancel &&
-                            widget.onVerticalSwipeComplete != null) {
-                          widget.onVerticalSwipeComplete(
-                              verticalDragInfo.direction);
-                        }
-
-                        verticalDragInfo = null;
-                      },
-              )),
-          Align(
-            alignment: Alignment.centerLeft,
-            heightFactor: 1,
-            child: SizedBox(
-                child: GestureDetector(onTap: () {
-                  widget.controller.previous();
-                }),
-                width: 70),
           ),
         ],
       ),
