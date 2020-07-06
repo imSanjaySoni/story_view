@@ -104,9 +104,15 @@ class StoryItem {
                       color: Color.fromRGBO(0, 137, 255, 1.0),
                       decoration: TextDecoration.underline,
                       decorationColor: Color.fromRGBO(0, 137, 255, 1.0)),
-              onTap: onLinkTap,
+              onTap: (String url) async {
+                print('inside match text');
+                await onLinkTap(url);
+              },
             ),
           ],
+          onTap: () {
+            print('rich text');
+          },
         )),
       ),
       shown: shown,
