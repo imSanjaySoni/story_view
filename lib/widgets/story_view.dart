@@ -84,35 +84,40 @@ class StoryItem {
           vertical: 16,
         ),
         child: Center(
-            child: ParsedText(
-          text: title,
-          softWrap: true,
-          style: textStyle ??
-              TextStyle(
-                color: contrast > 1.8 ? Colors.white : Colors.black,
-                fontSize: 18,
-              ),
-          parse: <MatchText>[
-            MatchText(
-              type: ParsedType.URL,
-              style: (textStyle ??
-                      TextStyle(
-                        color: contrast > 1.8 ? Colors.white : Colors.black,
-                        fontSize: 18,
-                      ))
-                  .copyWith(
-                      color: Color.fromRGBO(0, 137, 255, 1.0),
-                      decoration: TextDecoration.underline,
-                      decorationColor: Color.fromRGBO(0, 137, 255, 1.0)),
-              onTap: (String url) async {
-                print('inside match text');
-                await onLinkTap(url);
-              },
-            ),
-          ],
+            child: GestureDetector(
           onTap: () {
-            print('rich text');
+            print('hello from parsed text');
           },
+          child: ParsedText(
+            text: title,
+            softWrap: true,
+            style: textStyle ??
+                TextStyle(
+                  color: contrast > 1.8 ? Colors.white : Colors.black,
+                  fontSize: 18,
+                ),
+            parse: <MatchText>[
+              MatchText(
+                type: ParsedType.URL,
+                style: (textStyle ??
+                        TextStyle(
+                          color: contrast > 1.8 ? Colors.white : Colors.black,
+                          fontSize: 18,
+                        ))
+                    .copyWith(
+                        color: Color.fromRGBO(0, 137, 255, 1.0),
+                        decoration: TextDecoration.underline,
+                        decorationColor: Color.fromRGBO(0, 137, 255, 1.0)),
+                onTap: (String url) async {
+                  print('inside match text');
+                  await onLinkTap(url);
+                },
+              ),
+            ],
+            onTap: () {
+              print('rich text');
+            },
+          ),
         )),
       ),
       shown: shown,
