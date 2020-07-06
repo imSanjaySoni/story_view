@@ -87,9 +87,7 @@ class StoryItem {
             child: ParsedText(
           text: title,
           softWrap: true,
-          style: textStyle?.copyWith(
-                color: contrast > 1.8 ? Colors.white : Colors.black,
-              ) ??
+          style: textStyle ??
               TextStyle(
                 color: contrast > 1.8 ? Colors.white : Colors.black,
                 fontSize: 18,
@@ -97,9 +95,7 @@ class StoryItem {
           parse: <MatchText>[
             MatchText(
               type: ParsedType.URL,
-              style: (textStyle?.copyWith(
-                        color: contrast > 1.8 ? Colors.white : Colors.black,
-                      ) ??
+              style: (textStyle ??
                       TextStyle(
                         color: contrast > 1.8 ? Colors.white : Colors.black,
                         fontSize: 18,
