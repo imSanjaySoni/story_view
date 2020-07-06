@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'story_video.dart';
 import 'story_image.dart';
 
@@ -56,6 +57,7 @@ class StoryItem {
     bool shown = false,
     bool roundedTop = false,
     bool roundedBottom = false,
+    Function onLinkTap,
     Duration duration,
   }) {
     double contrast = ContrastHelper.contrast([
@@ -82,19 +84,34 @@ class StoryItem {
           vertical: 16,
         ),
         child: Center(
-          child: Text(
-            title,
-            style: textStyle?.copyWith(
-                  color: contrast > 1.8 ? Colors.white : Colors.black,
-                ) ??
-                TextStyle(
-                  color: contrast > 1.8 ? Colors.white : Colors.black,
-                  fontSize: 18,
-                ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        //color: backgroundColor,
+            child: ParsedText(
+          text: title,
+          softWrap: true,
+          style: textStyle?.copyWith(
+                color: contrast > 1.8 ? Colors.white : Colors.black,
+              ) ??
+              TextStyle(
+                color: contrast > 1.8 ? Colors.white : Colors.black,
+                fontSize: 18,
+              ),
+          parse: <MatchText>[
+            MatchText(
+              type: ParsedType.URL,
+              style: (textStyle?.copyWith(
+                        color: contrast > 1.8 ? Colors.white : Colors.black,
+                      ) ??
+                      TextStyle(
+                        color: contrast > 1.8 ? Colors.white : Colors.black,
+                        fontSize: 18,
+                      ))
+                  .copyWith(
+                      color: Color.fromRGBO(0, 137, 255, 1.0),
+                      decoration: TextDecoration.underline,
+                      decorationColor: Color.fromRGBO(0, 137, 255, 1.0)),
+              onTap: onLinkTap,
+            ),
+          ],
+        )),
       ),
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
