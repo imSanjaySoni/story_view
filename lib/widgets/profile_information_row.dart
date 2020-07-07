@@ -7,13 +7,15 @@ class ProfileInformationRow extends StatelessWidget {
   final double top;
   final String avatarUrl;
   final String playerUsername;
+  final Widget verifyWidget;
 
   const ProfileInformationRow(
       {Key key,
       @required this.createdAt,
       this.top = 70,
       @required this.avatarUrl,
-      @required this.playerUsername})
+      @required this.playerUsername,
+      @required this.verifyWidget})
       : super(key: key);
 
   @override
@@ -56,11 +58,7 @@ class ProfileInformationRow extends StatelessWidget {
                       SizedBox(
                         width: 8,
                       ),
-                      Image.asset(
-                        'assets/img/verify_blue.png',
-                        width: 16,
-                        height: 16,
-                      )
+                      verifyWidget ?? Container()
                     ],
                   ),
                   SizedBox(

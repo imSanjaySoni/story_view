@@ -469,6 +469,12 @@ class StoryView extends StatefulWidget {
   // Show Player information
   final bool showPlayerInformation;
 
+  // Widget will be used for showing the verified badge for the player
+  final Widget verifiedBadge;
+
+  // The top offset for the profile row
+  final double topOffsetForProfile;
+
   StoryView({
     @required this.storyItems,
     @required this.controller,
@@ -482,6 +488,8 @@ class StoryView extends StatefulWidget {
     this.progressBarpadding,
     @required this.playerUsername,
     @required this.showPlayerInformation,
+    @required this.verifiedBadge,
+    @required this.topOffsetForProfile,
   })  : assert(storyItems != null && storyItems.length > 0,
             "[storyItems] should not be null or empty"),
         assert(progressPosition != null, "[progressPosition] cannot be null"),
@@ -775,7 +783,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
           ),
           this.widget.showPlayerInformation
               ? ProfileInformationRow(
-                  top: 40,
+                  top: this.widget.topOffsetForProfile ?? 40,
+                  verifyWidget: this.widget.verifiedBadge,
                   createdAt: this._currentStory.createdAt,
                   avatarUrl: this.widget.avatarUrl,
                   playerUsername: this.widget.playerUsername)
