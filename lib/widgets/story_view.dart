@@ -91,6 +91,7 @@ class StoryItem {
         child: Center(
             child: ParsedText(
           text: title,
+          alignment: TextAlign.center,
           softWrap: true,
           style: textStyle ??
               TextStyle(
