@@ -785,7 +785,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
               ? ProfileInformationRow(
                   top: this.widget.topOffsetForProfile ?? 40,
                   verifyWidget: this.widget.verifiedBadge,
-                  createdAt: this._currentStory.createdAt,
+                  createdAt: this._currentStory?.createdAt ?? DateTime.now(),
                   avatarUrl: this.widget.avatarUrl,
                   playerUsername: this.widget.playerUsername)
               : Container(),
