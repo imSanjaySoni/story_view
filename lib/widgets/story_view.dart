@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
+import 'package:story_view/widgets/profile_information_row.dart';
 import 'story_video.dart';
 import 'story_image.dart';
 
@@ -39,8 +40,12 @@ class StoryItem {
   /// The id assigned to this storyitem
   String id;
 
+  /// The time of creation of this story
+  final DateTime createdAt;
+
   StoryItem(
     this.view, {
+    @required this.createdAt,
     @required this.id,
     this.duration,
     this.shown = false,
@@ -58,6 +63,7 @@ class StoryItem {
     @required String title,
     @required String id,
     @required Color backgroundColor,
+    @required DateTime createdAt,
     TextStyle textStyle,
     bool shown = false,
     bool roundedTop = false,
@@ -118,6 +124,7 @@ class StoryItem {
       ),
       shown: shown,
       id: id,
+      createdAt: createdAt,
       duration: duration ?? Duration(seconds: 3),
     );
   }
@@ -129,6 +136,7 @@ class StoryItem {
     String file,
     @required String id,
     double aspectRatio,
+    @required DateTime createdAt,
     @required StoryController controller,
     BoxFit imageFit = BoxFit.fitWidth,
     String caption,
@@ -182,6 +190,7 @@ class StoryItem {
       ),
       shown: shown,
       id: id,
+      createdAt: createdAt,
       duration: duration ?? Duration(seconds: 3),
     );
   }
@@ -199,6 +208,7 @@ class StoryItem {
     bool shown = false,
     bool roundedTop = true,
     bool roundedBottom = false,
+    @required DateTime createdAt,
     Duration duration,
   }) {
     return StoryItem(
@@ -238,6 +248,7 @@ class StoryItem {
       ),
       shown: shown,
       id: id,
+      createdAt: createdAt,
       duration: duration ?? Duration(seconds: 3),
     );
   }
@@ -248,6 +259,7 @@ class StoryItem {
     String url,
     String file,
     @required String id,
+    @required DateTime createdAt,
     @required StoryController controller,
     Duration duration,
     BoxFit imageFit = BoxFit.fitWidth,
@@ -295,6 +307,7 @@ class StoryItem {
         ),
         shown: shown,
         id: id,
+        createdAt: createdAt,
         duration: duration ?? Duration(seconds: 10));
   }
 
@@ -307,6 +320,7 @@ class StoryItem {
     String caption,
     bool shown = false,
     @required String id,
+    @required DateTime createdAt,
     Duration duration,
   }) {
     assert(imageFit != null, "[imageFit] should not be null");
@@ -355,6 +369,7 @@ class StoryItem {
         ),
         shown: shown,
         id: id,
+        createdAt: createdAt,
         duration: duration ?? Duration(seconds: 3));
   }
 
@@ -368,6 +383,7 @@ class StoryItem {
     bool roundedTop = true,
     bool roundedBottom = false,
     Duration duration,
+    @required DateTime createdAt,
     @required String id,
   }) {
     return StoryItem(
@@ -401,6 +417,7 @@ class StoryItem {
       ),
       shown: shown,
       id: id,
+      createdAt: createdAt,
       duration: duration ?? Duration(seconds: 3),
     );
   }
@@ -443,9 +460,19 @@ class StoryView extends StatefulWidget {
   // Progress bar padding
   final EdgeInsets progressBarpadding;
 
+  // Avatar of the player
+  final String avatarUrl;
+
+  // Username of player
+  final String playerUsername;
+
+  // Show Player information
+  final bool showPlayerInformation;
+
   StoryView({
     @required this.storyItems,
     @required this.controller,
+    @required this.avatarUrl,
     this.onComplete,
     this.onStoryShow,
     this.progressPosition = ProgressPosition.top,
@@ -453,6 +480,8 @@ class StoryView extends StatefulWidget {
     this.inline = false,
     this.onVerticalSwipeComplete,
     this.progressBarpadding,
+    @required this.playerUsername,
+    @required this.showPlayerInformation,
   })  : assert(storyItems != null && storyItems.length > 0,
             "[storyItems] should not be null or empty"),
         assert(progressPosition != null, "[progressPosition] cannot be null"),
@@ -701,9 +730,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                       if (verticalDragInfo == null) {
                         verticalDragInfo = VerticalDragInfo();
                       }
-
                       verticalDragInfo.update(details.primaryDelta);
-
                       // TODO: provide callback interface for animation purposes
                     },
               onVerticalDragEnd: widget.onVerticalSwipeComplete == null
@@ -746,6 +773,13 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
               ),
             ),
           ),
+          this.widget.showPlayerInformation
+              ? ProfileInformationRow(
+                  top: 40,
+                  createdAt: this._currentStory.createdAt,
+                  avatarUrl: this.widget.avatarUrl,
+                  playerUsername: this.widget.playerUsername)
+              : Container(),
         ],
       ),
     );
