@@ -36,8 +36,12 @@ class StoryItem {
   /// The page content
   final Widget view;
 
+  /// The id assigned to this storyitem
+  String id;
+
   StoryItem(
     this.view, {
+    @required this.id,
     this.duration,
     this.shown = false,
   }) : assert(duration != null, "[duration] should not be null");
@@ -52,6 +56,7 @@ class StoryItem {
   /// what inline/full-page means.
   static StoryItem text({
     @required String title,
+    @required String id,
     @required Color backgroundColor,
     TextStyle textStyle,
     bool shown = false,
@@ -111,6 +116,7 @@ class StoryItem {
         )),
       ),
       shown: shown,
+      id: id,
       duration: duration ?? Duration(seconds: 3),
     );
   }
@@ -120,6 +126,7 @@ class StoryItem {
   factory StoryItem.pageImage({
     String url,
     String file,
+    @required String id,
     double aspectRatio,
     @required StoryController controller,
     BoxFit imageFit = BoxFit.fitWidth,
@@ -173,6 +180,7 @@ class StoryItem {
         ),
       ),
       shown: shown,
+      id: id,
       duration: duration ?? Duration(seconds: 3),
     );
   }
@@ -183,6 +191,7 @@ class StoryItem {
     String url,
     String file,
     @required Text caption,
+    @required String id,
     @required StoryController controller,
     BoxFit imageFit = BoxFit.cover,
     Map<String, dynamic> requestHeaders,
@@ -227,6 +236,7 @@ class StoryItem {
         ),
       ),
       shown: shown,
+      id: id,
       duration: duration ?? Duration(seconds: 3),
     );
   }
@@ -236,6 +246,7 @@ class StoryItem {
   factory StoryItem.pageVideo({
     String url,
     String file,
+    @required String id,
     @required StoryController controller,
     Duration duration,
     BoxFit imageFit = BoxFit.fitWidth,
@@ -282,6 +293,7 @@ class StoryItem {
           ),
         ),
         shown: shown,
+        id: id,
         duration: duration ?? Duration(seconds: 10));
   }
 
@@ -293,6 +305,7 @@ class StoryItem {
     BoxFit imageFit = BoxFit.fitWidth,
     String caption,
     bool shown = false,
+    @required String id,
     Duration duration,
   }) {
     assert(imageFit != null, "[imageFit] should not be null");
@@ -340,6 +353,7 @@ class StoryItem {
           ),
         ),
         shown: shown,
+        id: id,
         duration: duration ?? Duration(seconds: 3));
   }
 
@@ -353,6 +367,7 @@ class StoryItem {
     bool roundedTop = true,
     bool roundedBottom = false,
     Duration duration,
+    @required String id,
   }) {
     return StoryItem(
       Container(
@@ -384,6 +399,7 @@ class StoryItem {
         ),
       ),
       shown: shown,
+      id: id,
       duration: duration ?? Duration(seconds: 3),
     );
   }
